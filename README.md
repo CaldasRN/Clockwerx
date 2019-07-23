@@ -33,7 +33,6 @@ Use RPi to Record buttons from clock remote to control clock with Rpi 'IR Remote
 `ssh pi@<RPI IP Address>`
 
 #if you get this warning:
-
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
@@ -51,7 +50,6 @@ Offending ECDSA key in /home/user/.ssh/known_hosts:6
 ECDSA host key for 192.168.1.194 has changed and you have requested strict checking.
 Host key verification failed.
 ```
-
 #execute the command as directed
 
 `ssh-keygen -f "/home/user/.ssh/known_hosts" -R "<RPi IP Address>"`
