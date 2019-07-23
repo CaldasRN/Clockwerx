@@ -66,3 +66,6 @@ sudo apt-get update
 
 sudo apt-get -y upgrade
 ```
+
+#Install vim (or what ever editor you prefer)
+`sudo apt-get install vim`
