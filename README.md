@@ -1,21 +1,29 @@
 # Clockwerx
 Use RPi to Record buttons from clock remote to control clock with Rpi 'IR Remote Shield v1.0' over the network
+
+## Load Image to SD Card
 #Insert SD card into computer
+
 #Identify SD card device name
-sudo fdisk -l
+'sudo fdisk -l'
+
 #SD card will be list as something like:
-Disk /dev/mmcblk0: 29.7 GiB, 31914983424 bytes, 62333952 sectors
+'Disk /dev/mmcblk0: 29.7 GiB, 31914983424 bytes, 62333952 sectors'
+
 #Install Jessie Image onto SD card of RPi
-sudo dd if=2017-07-05-raspbian-jessie.img of=/dev/mmcblk0 bs=4M status=progress conv=fsync
+'sudo dd if=2017-07-05-raspbian-jessie.img of=/dev/mmcblk0 bs=4M status=progress conv=fsync'
+
 #eject SD card from computer and put into Rpi
 #boot the RPi
 #connect RPi to network
 #enable ssh on RPI:
-sudo raspi-config
+'sudo raspi-config'
+
 #select 'Interfacing Options' and select 'SSH' to enable
 #On PC ssh into RPi
 ssh pi@<RPI IP Address>
 #if you get this warning:
+```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -31,6 +39,7 @@ Offending ECDSA key in /home/user/.ssh/known_hosts:6
   ssh-keygen -f "/home/user/.ssh/known_hosts" -R "<RPi IP Address>"
 ECDSA host key for 192.168.1.194 has changed and you have requested strict checking.
 Host key verification failed.
+```
 #execute the command as directed
 ssh-keygen -f "/home/user/.ssh/known_hosts" -R "<RPi IP Address>"
 #then run ssh again
