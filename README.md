@@ -75,7 +75,9 @@ and add the lines below to the file:
 lirc_dev
 lirc_rpi gpio_out_pin=17 gpio_in_pin=18
 ```
-Make sure that the gpio_out_pin parameter points to the pin controlling the IR LED (in this case, it's pin 17). Next, open the file /etc/lirc/hardware.conf as before with sudo and add the following configuration to the file:
+Make sure that the gpio_out_pin parameter points to the pin controlling the IR LED (in this case, it's pin 17). 
+
+Next, open the file /etc/lirc/hardware.conf as before with sudo and add the following configuration to the file:
 ```
 LIRCD_ARGS="--uinput"
 LOAD_MODULES=true
@@ -85,10 +87,18 @@ MODULES="lirc_rpi"
 LIRCD_CONF=""
 LIRCMD_CONF=""
 ```
+Finally, open the file /boot/config.txt and add:
+
+`dtoverlay=lirc-rpi,gpio_in_pin=18,gpio_out_pin=17`
+
 Now, reboot the Raspberry Pi using the
 
 `sudo reboot`
 
-Next, replace the /etc/lirc/lircd.conf file with the provided lircd.conf file and restart LIRC with:
+Once rebooted, ssh back into the RPi and replace the /etc/lirc/lircd.conf file with the provided lircd.conf file and restart LIRC with:
 
 `sudo /etc/init.d/lirc restart`
+
+Now create the device:
+
+`sudo lircd --device /dev/lirc0`
