@@ -142,9 +142,9 @@ Start Django Project in the virtual environment:
 ```
 cd ~/
 
-mkdir Dev && cd Dev
+mkdir clock && cd clock
 
-mkdir cfehome && cd cfehome
+mkdir Clockwerx && cd Clockwerx
 
 virtualenv -p python3 .
 
@@ -152,9 +152,9 @@ source bin/activate
 
 pip install django==1.10.3
 
-django-admin.py startproject cfehome
+django-admin.py startproject Clockwerx
 
-mv /home/pi/Dev/cfehome/cfehome /home/pi/Dev/cfehome/src
+mv /home/pi/clock/Clockwerx/Clockwerx /home/pi/clock/Clockwerx/src
 ```
 
 Apache2 Settings:
@@ -177,20 +177,20 @@ sudo apt-get install apache2 -y # reinstalls it
 
     ServerAdmin webmaster@localhost
 
-    Alias /static /home/pi/Dev/cfehome/static
-        <Directory /home/pi/Dev/cfehome/static>
+    Alias /static /home/pi/clock/Clockwerx/static
+        <Directory /home/pi/clock/Clockwerx/static>
            Require all granted
          </Directory>
 
-    <Directory /home/pi/Dev/cfehome/src/cfehome>
+    <Directory /home/pi/clock/Clockwerx/src/Clockwerx>
         <Files wsgi.py>
             Require all granted
         </Files>
     </Directory>
 
-    WSGIDaemonProcess cfehome python-path=/home/pi/Dev/cfehome/src:/home/pi/Dev/cfehome/lib/python2.7/site-packages
-    WSGIProcessGroup cfehome
-    WSGIScriptAlias / /home/pi/Dev/cfehome/src/cfehome/wsgi.py
+    WSGIDaemonProcess Clockwerx python-path=/home/pi/clock/Clockwerx/src:/home/pi/clock/Clockwerx/lib/python2.7/site-packages
+    WSGIProcessGroup Clockwerx
+    WSGIScriptAlias / /home/pi/clock/Clockwerx/src/Clockwerx/wsgi.py
 
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -220,16 +220,16 @@ sudo service apache2 stop
 Set Ownership of Database to Pi user for Django
 ```
 sudo adduser $USER www-data
-sudo chown www-data:www-data /home/$USER/Dev/cfehome    
-sudo chown www-data:www-data /home/$USER/Dev/cfehome/src/db.sqlite3
-sudo chmod -R 775 ~/Dev/cfehome
+sudo chown www-data:www-data /home/$USER/clock/Clockwerx    
+sudo chown www-data:www-data /home/$USER/clock/Clockwerx/src/db.sqlite3
+sudo chmod -R 775 ~/clock/Clockwerx
 
 # if above fails, try (thanks Mike!):
-sudo chown -R www-data:www-data ~/Dev/cfehome
-sudo chown www-data:www-data /home/pi/Dev/cfehome/src
+sudo chown -R www-data:www-data ~/clock/Clockwerx
+sudo chown www-data:www-data /home/pi/clock/Clockwerx/src
 # or if a new project
-sudo chown -R www-data:www-data ~/Dev/<your-virtuaenv-name>
-sudo chown www-data:www-data /home/pi/Dev/<your-virtuaenv-name>/src/
+sudo chown -R www-data:www-data ~/clock/<your-virtuaenv-name>
+sudo chown www-data:www-data /home/pi/clock/<your-virtuaenv-name>/src/
 ```
 
 Enabling module wsgi
