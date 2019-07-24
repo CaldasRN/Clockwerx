@@ -99,6 +99,10 @@ Once rebooted, ssh back into the RPi and replace the /etc/lirc/lircd.conf file w
 
 `sudo /etc/init.d/lirc restart`
 
+Now create the device:
+
+`sudo lircd --device /dev/lirc0`
+
 ### Apache2 + Django
 
 
@@ -134,7 +138,7 @@ sudo pip install virtualenv
 
 ```
 
-Start Django Project:
+Start Django Project in the virtual environment:
 ```
 cd ~/
 
@@ -232,7 +236,3 @@ Enabling module wsgi
 ```
 sudo a2enmod wsgi
 ```
-
-Now create the device:
-
-`sudo lircd --device /dev/lirc0`
