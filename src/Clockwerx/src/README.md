@@ -99,6 +99,140 @@ Once rebooted, ssh back into the RPi and replace the /etc/lirc/lircd.conf file w
 
 `sudo /etc/init.d/lirc restart`
 
+### Apache2 + Django
+
+
+Update Software:
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+Install Apache2:
+
+```
+sudo apt-get install apache2 -y
+
+sudo apt-get install libapache2-mod-wsgi-py3
+
+sudo apt-get install libapache2-mod-wsgi # if using Python2
+```
+
+Install Pip & Django:
+
+```
+sudo apt-get install python-setuptools python-dev build-essential
+
+sudo easy_install pip 
+
+sudo pip install django==X.Y.Z #where X.Y.Z is the version number
+
+sudo pip install django==1.10.3
+
+sudo pip install virtualenv 
+
+```
+
+Start Django Project:
+```
+cd ~/
+
+mkdir Dev && cd Dev
+
+mkdir cfehome && cd cfehome
+
+virtualenv -p python3 .
+
+source bin/activate
+
+pip install django==1.10.3
+
+django-admin.py startproject cfehome
+
+mv /home/pi/Dev/cfehome/cfehome /home/pi/Dev/cfehome/src
+```
+
+Apache2 Settings:
+
+```
+sudo nano /etc/apache2/sites-available/000-default.conf
+```
+Note: If errors happen with below, just do the following and it will re-install apache:
+
+```
+sudo apt-get purge apache2 # removes apache2
+
+sudo apt-get install apache2 -y # reinstalls it
+
+```
+
+```     
+<VirtualHost *:80>
+    ServerName www.example.com
+
+    ServerAdmin webmaster@localhost
+
+    Alias /static /home/pi/Dev/cfehome/static
+        <Directory /home/pi/Dev/cfehome/static>
+           Require all granted
+         </Directory>
+
+    <Directory /home/pi/Dev/cfehome/src/cfehome>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    WSGIDaemonProcess cfehome python-path=/home/pi/Dev/cfehome/src:/home/pi/Dev/cfehome/lib/python2.7/site-packages
+    WSGIProcessGroup cfehome
+    WSGIScriptAlias / /home/pi/Dev/cfehome/src/cfehome/wsgi.py
+
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+```
+
+Restart Apache:
+
+```
+# Restart in two ways:
+sudo apachectl restart
+sudo service apache2 restart
+
+
+# Start Apache in two ways:
+sudo apachectl start
+sudo service apache2 start
+
+# Stop Apache in two ways:
+sudo apachectl stop
+sudo service apache2 stop
+```
+
+Set Ownership of Database to Pi user for Django
+```
+sudo adduser $USER www-data
+sudo chown www-data:www-data /home/$USER/Dev/cfehome    
+sudo chown www-data:www-data /home/$USER/Dev/cfehome/src/db.sqlite3
+sudo chmod -R 775 ~/Dev/cfehome
+
+# if above fails, try (thanks Mike!):
+sudo chown -R www-data:www-data ~/Dev/cfehome
+sudo chown www-data:www-data /home/pi/Dev/cfehome/src
+# or if a new project
+sudo chown -R www-data:www-data ~/Dev/<your-virtuaenv-name>
+sudo chown www-data:www-data /home/pi/Dev/<your-virtuaenv-name>/src/
+```
+
+Enabling module wsgi
+```
+sudo a2enmod wsgi
+```
+
 Now create the device:
 
 `sudo lircd --device /dev/lirc0`
