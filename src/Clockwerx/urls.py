@@ -16,6 +16,23 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+#from clocksapp import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+#    url(r'^$', views.powerBtn, name='powerBtn'),
 ]
+
+# Use include() to add paths from the catalog application 
+from django.conf.urls import include
+
+urlpatterns += [
+    url('clocksapp/', include('clocksapp.urls')),
+]
+
+#Add URL maps to redirect the base URL to our application
+from django.views.generic import RedirectView
+urlpatterns += [
+    url('', RedirectView.as_view(url='/clocksapp/', permanent=True)),
+]
+
