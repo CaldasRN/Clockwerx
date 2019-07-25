@@ -14,18 +14,21 @@ def powerBtn(request):
     time.sleep(1)
     os.system('irsend SEND_ONCE lircd.conf KEY_POWER')
     return HttpResponse('')
-"""
+
 #Set timer on clock
-def timer(request):
+def timer(request,hour,min,sec):
 
     send = "irsend SEND_ONCE lircd.conf KEY_"
+    hour = str(hour)
+    min = str(min)
+    sec = str(sec)
 
-    digit1 = send + sys.argv[1]
-    digit2 = send + sys.argv[2]
-    digit3 = send + sys.argv[3]
-    digit4 = send + sys.argv[4]
-    digit5 = send + sys.argv[5]
-    digit6 = send + sys.argv[6]
+    digit1 = send + hour[0]
+    digit2 = send + hour[1]
+    digit3 = send + min[0]
+    digit4 = send + min[1]
+    digit5 = send + sec[0]
+    digit6 = send + sec[1]
 
     cd_set = send + "CD-SET"
     mode = send + "MODE"
@@ -45,4 +48,4 @@ def timer(request):
     os.system(digit5)
     os.system(digit6)
     os.system(play)
-"""
+    return HttpResponse('')
