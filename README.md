@@ -236,3 +236,8 @@ Enabling module wsgi
 ```
 sudo a2enmod wsgi
 ```
+
+# Set TimeZone and Sync RPi
+```
+timedatectl set-ntp 1
+timedatectl set-timezone "America/New_York"

@@ -5,7 +5,11 @@ from django.shortcuts import render
 import os
 import time
 import sys
-
+"""
+#Test
+def austin(request):
+    return HttpResponse('Hi')
+"""
 #Press power button on clock
 def powerBtn(request):
     os.system('sudo kill $(pidof lircd)')
@@ -16,20 +20,30 @@ def powerBtn(request):
     return HttpResponse('')
 
 #Set timer on clock
-def timer(request,hour,min,sec):
-
+def timer(request):
+    #Assign string for simplified command construction
     send = "irsend SEND_ONCE lircd.conf KEY_"
-    hour = str(hour)
-    min = str(min)
-    sec = str(sec)
 
-    digit1 = send + hour[0]
-    digit2 = send + hour[1]
-    digit3 = send + min[0]
-    digit4 = send + min[1]
-    digit5 = send + sec[0]
-    digit6 = send + sec[1]
+    #Convert provided ints to string to access each digit
+    time = str(request.GET.get('time'))
 
+#    hour = str(request.GET.get('hour'))
+#    min = str(request.GET.get('min'))
+#    sec = str(request.GET.get('sec'))
+
+#    hour = str(hour)
+#    min = str(min)
+#    sec = str(sec)
+
+    #Compose Time digits
+    digit1 = send + time[0]
+    digit2 = send + time[1]
+    digit3 = send + time[3]
+    digit4 = send + time[4]
+    digit5 = send + time[6]
+    digit6 = send + time[7]
+
+    #Compose Control command
     cd_set = send + "CD-SET"
     mode = send + "MODE"
     play = send + "PLAY"

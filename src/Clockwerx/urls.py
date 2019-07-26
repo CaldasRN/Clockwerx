@@ -26,12 +26,13 @@ urlpatterns = [
 from django.conf.urls import include
 
 urlpatterns += [
-    url('clocksapp/', include('clocksapp.urls')),
+    url(r'^clocksapp/', include('clocksapp.urls')),
 ]
-'''
+
+"""
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
 urlpatterns += [
     url('', RedirectView.as_view(url='/clocksapp/', permanent=True)),
 ]
-'''
+"""
