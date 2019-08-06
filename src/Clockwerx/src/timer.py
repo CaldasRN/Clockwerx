@@ -5,12 +5,12 @@ import sys
 
 send = "irsend SEND_ONCE lircd.conf KEY_"
 
-digit1 = send + sys.argv[1]
-digit2 = send + sys.argv[2]
-digit3 = send + sys.argv[3]
-digit4 = send + sys.argv[4]
-digit5 = send + sys.argv[5]
-digit6 = send + sys.argv[6]
+digit1 = send + sys.argv[1][0]
+digit2 = send + sys.argv[1][1]
+digit3 = send + sys.argv[1][3]
+digit4 = send + sys.argv[1][4]
+digit5 = send + sys.argv[1][6]
+digit6 = send + sys.argv[1][7]
 
 cd_set = send + "CD-SET"
 mode = send + "MODE"
