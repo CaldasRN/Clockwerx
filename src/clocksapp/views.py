@@ -14,6 +14,8 @@ play = send + "PLAY"
 ret = send + "RETURN"
 t_set = send + "T-SET"
 power = send + "POWER"
+plus = send + "+"
+minus = send + "-"
 
 #Press power button on clock
 def powerBtn(request):
@@ -116,3 +118,23 @@ def milTime(request):
     mil = send + '0'
     os.system(mil)
     return HttpResponse('MilTime')
+
+#Dim Clock
+def dim(request):
+    if request.method == 'GET' and 'bright' in request.GET:
+        bright = int(request.GET.get('bright'))
+#        bright = int(bright)
+
+        if bright > 0 and bright < 8:
+            os.system(minus)
+            os.system(minus)
+            os.system(minus)
+            os.system(minus)
+            os.system(minus)
+            os.system(minus)
+            os.system(minus)
+
+            i = 1
+            while i < bright:
+                os.system(plus)
+                i += 1
