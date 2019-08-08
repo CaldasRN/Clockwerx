@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from subprocess import check_output
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,8 +25,10 @@ SECRET_KEY = 'b(c9*qw!3d_+d7$0r#$^%d)7$uh0rhx3aghioklxks%^xj02^v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ipWlan = str(check_output(['hostname', '-I']))
+ipWlan = ipWlan[2:16]
 
-ALLOWED_HOSTS = ['192.168.12.135', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
 
 # Application definition
 
