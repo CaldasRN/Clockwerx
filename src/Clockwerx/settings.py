@@ -25,7 +25,7 @@ SECRET_KEY = 'b(c9*qw!3d_+d7$0r#$^%d)7$uh0rhx3aghioklxks%^xj02^v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.194', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.12.143', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -56,7 +56,9 @@ ROOT_URLCONF = 'Clockwerx.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

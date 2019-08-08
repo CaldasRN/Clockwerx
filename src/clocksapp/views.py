@@ -17,6 +17,10 @@ power = send + "POWER"
 plus = send + "+"
 minus = send + "-"
 
+#Load Home page
+def clocks(request):
+    return render(request, 'clocks.html')
+
 #Press power button on clock
 def powerBtn(request):
     os.system('sudo kill $(pidof lircd)')
@@ -24,7 +28,7 @@ def powerBtn(request):
     os.system('sudo lircd --device /dev/lirc0')
     time.sleep(1)
     os.system(power)
-    return HttpResponse('Power')
+    return render(request, 'clocks.html')
 
 #Set timer on clock
 def timer(request):
@@ -56,12 +60,12 @@ def timer(request):
         os.system(digit5)
         os.system(digit6)
         os.system(play)
-        return HttpResponse("Timer")
+        return render(request, 'clocks.html')
 
     #Pause Timer
     if request.method == 'GET' and 'pause' in request.GET:
         os.system(play)
-        return HttpResponse('Pause')
+        return render(request, 'clocks.html')
 
     #Stop Timer and show time
     if request.method == 'GET' and 'stop' in request.GET:
@@ -69,7 +73,7 @@ def timer(request):
         os.system(cd_set)
         os.system(cd_set)
         os.system(ret)
-        return HttpResponse('Stop')
+        return render(request, 'clocks.html')
 
 #Syncronize clock
 def sync(request):
@@ -110,14 +114,14 @@ def sync(request):
     os.system(digit5)
     os.system(digit6)
     os.system(ret)
-    return HttpResponse('Time')
+    return render(request, 'clocks.html')
 
 #Toggle between Military time and Regular time
 def milTime(request):
 
     mil = send + '0'
     os.system(mil)
-    return HttpResponse('MilTime')
+    return render(request, 'clocks.html')
 
 #Dim Clock
 def dim(request):
@@ -138,3 +142,4 @@ def dim(request):
             while i < bright:
                 os.system(plus)
                 i += 1
+    return render(request, 'clocks.html')
