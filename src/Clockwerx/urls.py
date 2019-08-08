@@ -29,10 +29,8 @@ urlpatterns += [
     url(r'^clocksapp/', include('clocksapp.urls')),
 ]
 
-
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
 urlpatterns += [
     url(r'^$', RedirectView.as_view(url='/clocksapp/', permanent=True)),
 ]
-
