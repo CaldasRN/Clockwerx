@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^sync/$', views.sync, name='sync'),
     url(r'^milTime/$', views.milTime, name='milTime'),
     url(r'^dim/$', views.dim, name='dim'),
-    url(r'^$', views.clocks, name='clocks'),
+#    url(r'^$', views.clocks, name='clocks'),
+    url(r'^api/timer/$', views.TimerListCreate.as_view() ),
 ]

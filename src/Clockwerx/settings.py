@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Clockwerx',
-    'clocksapp',
+    'clocksapp',            # add the clocksapp
+    'rest_framework',       # enable rest framework
+    'EventClock_FE',        # add the frontend app from REACT
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'EventClock_FE/public'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

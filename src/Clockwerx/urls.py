@@ -22,15 +22,16 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
 
-# Use include() to add url(paths) from the clocksapp application 
+# Use include() to add url(paths) from the apps application 
 from django.conf.urls import include
 
 urlpatterns += [
     url(r'^clocksapp/', include('clocksapp.urls')),
+    url(r'^EventClock_FE/', include('EventClock_FE.urls')),
 ]
 
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
 urlpatterns += [
-    url(r'^$', RedirectView.as_view(url='/clocksapp/', permanent=True)),
+    url(r'^$', RedirectView.as_view(url='/EventClock_FE/', permanent=True)),
 ]

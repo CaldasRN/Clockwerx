@@ -4,6 +4,24 @@ import os
 import time
 import sys
 
+"""
+####################################################################
+This part is to convert the Django project into a REST API and to 
+handle GET and POST requests
+"""
+
+from clocksapp.models import Timer
+from clocksapp.serializers import TimerSerializer
+from rest_framework import generics
+
+class TimerListCreate(generics.ListCreateAPIView):
+    queryset = Timer.objects.all()
+    serializer_class = TimerSerializer
+
+"""
+####################################################################
+"""
+
 #Assign string for simplified command construction
 send = "irsend SEND_ONCE lircd.conf KEY_"
 
@@ -18,8 +36,8 @@ plus = send + "+"
 minus = send + "-"
 
 #Load Home page
-def clocks(request):
-    return render(request, 'clocks.html')
+#def clocks(request):
+#    return render(request, 'clocks.html')
 
 #Press power button on clock
 def powerBtn(request):
