@@ -25,10 +25,23 @@ SECRET_KEY = 'b(c9*qw!3d_+d7$0r#$^%d)7$uh0rhx3aghioklxks%^xj02^v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 ipWlan = str(check_output(['hostname', '-I']))
 ipWlan = ipWlan[2:16]
 
-ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
+
+#ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 '192.168.12.135',
+                 '192.168.12.136',
+                 '192.168.12.137',
+                 '192.168.12.138',
+                 '192.168.12.139',
+                 '192.168.12.140',
+                 '192.168.12.141',
+                 '192.168.12.142',
+                 '192.168.12.143'
+                 ]
 
 # Application definition
 
@@ -61,7 +74,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'EventClock_FE/public'),
+            os.path.join(BASE_DIR, 'EventClock_FE/build'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -126,3 +139,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASS' : (
+'rest_framework.authentication.BasicAuthentication', 
+)
+}

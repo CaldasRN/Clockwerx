@@ -1,0 +1,68 @@
+#!/bin/bash
+
+INIT=false
+HELP=false
+
+USAGE="Usage: $0 [options]
+Options:
+    -h, --help: This message
+    -i, --init: First time system initialization run
+    -u, --update: system and/or node / npm package update (same as --init)
+"
+
+OPTS=`getopt -o hiu? --long help,init,update -n 'parse-options' -- "$@"`
+
+if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; HELP=true fi
+
+eval set -- "$OPTS"
+
+while true; do
+  case "$1" in
+    -h | -? | --help ) HELP=true; shift ;;
+    -i | --init | -u | --update ) INIT=true; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
+
+if [ $HELP ] ; then
+  echo $USAGE
+  exit 1;
+fi
+
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get autoremove
+sudo apt-get autoclean
+
+if [ $INIT ] ; then
+  ### first time setup or node/npm update
+  curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  sudo apt-get install -y npm
+  sudo npm install npm@latest -g
+fi
+
+source /home/pi/clock/Clockwerx/bin/activate
+python /home/pi/clock/Clockwerx/autoGitPull.py
+
+chown -R pi.pi /home/pi/clock/Clockwerx
+chmod 755 /home/pi/clock/Clockwerx/update_system
+
+cd /home/pi/clock/Clockwerx/EventClock_FE
+
+if [ $INIT ] ; then
+  ### first time setup or npm package updates
+  npm update
+
+  ### node-sass gets sassy
+  rm -rf /home/pi/.node-gyp
+  npm install node-gyp
+  npm rebuild node-sass
+fi
+
+# build static web page files
+npm run build
+
+sudo systemctl daemon-reload
+sudo service apache2 restart

@@ -22,7 +22,8 @@ class Countdown extends Component {
       Api.postTime({
         ...this.props.store.currentTime,
         id: this.props.id,
-        status: 'start'
+        stop: 'false',
+        pause: 'false',
       })
       // Then is a response to make sure that it was successful to hit api
       .then((response) => {
@@ -32,9 +33,9 @@ class Countdown extends Component {
       })
       // Catch is an error... its just an error
       .catch((error) => {
-        console.log('Error on preStart for Countdown.js', error);
+        console.log(error);
       });
-      // Remove when endpoints are working
+      // TODO: Remove when endpoints are working
       window.setTimeout(() => {
         this.startTimer()
       }, 2000);
@@ -62,14 +63,49 @@ class Countdown extends Component {
     }, 10);
   };
 
+  // Create separate call for for stop and pause as they have two separate API functions
+
   stopTimer = () => {
-    clearInterval(this.timer);
-    this.setState({ timerOn: false });
+    this.setState({
+      timerOn: false
+    }, () => {
+      // Setting up post for api call, needs to match endpoint titles and information
+      Api.postTime({
+        stop: 'true',
+      })
+      // Then is a response to make sure that it was successful to hit api
+      .then((response) => {
+        clearInterval(this.timer);
+      })
+      // Catch is an error... its just an error
+      .catch((error) => {
+        console.log(error);
+      });
+      // TODO: Remove when endpoints are working
+      clearInterval(this.timer);
+      this.setState({ timerOn: false });
+    });
   };
 
   resetTimer = () => {
     this.setState({
       timerTime: this.state.timerStart
+    }, () => {
+      // Setting up post for api call, needs to match endpoint titles and information
+      Api.postTime({
+        ...this.props.store.currentTime,
+        id: this.props.id,
+        stop: 'false',
+        pause: 'false',
+      })
+      // Then is a response to make sure that it was successful to hit api
+      .then((response) => {
+        clearInterval(this.timer);
+      })
+      // Catch is an error... its just an error
+      .catch((error) => {
+        console.log(error);
+      });
     });
   };
 
@@ -81,6 +117,8 @@ class Countdown extends Component {
   render() {
     let { timerTime, timerStart, timerOn } = this.state;
     let disableButtons = false;
+    let clockIP = this.props.ip;
+    let clockID = this.props.id;
 
     if (this.props.store.masterTime.timerOn === true) {
       timerTime = this.props.store.masterTime.timerCount;
@@ -93,9 +131,10 @@ class Countdown extends Component {
     let minutes = ("0" + Math.floor((timerTime / 60000) % 60)).slice(-2);
     let hours = ("0" + Math.floor((timerTime / 3600000) % 60)).slice(-2);
 
+    console.log(clockIP, 'testing IP');
     return (
-      <div id={this.props.id} className="roomClock">
-        <div className="roomClock-hd">{this.props.id}</div>
+      <div id={clockID} className="roomClock">
+        <div className="roomClock-hd">{clockID}</div>
         <div className="roomClock-bd">
           <div className="timer">
             <div className="timer-display">

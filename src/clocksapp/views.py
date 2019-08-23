@@ -1,14 +1,17 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 import os
 import time
 import sys
+import requests
+from subprocess import check_output
 
-"""
 ####################################################################
-This part is to convert the Django project into a REST API and to 
-handle GET and POST requests
-"""
+#This part is to convert the Django project into a REST API and to 
+#handle.GET and.GET.requests
+
 
 from clocksapp.models import Timer
 from clocksapp.serializers import TimerSerializer
@@ -18,37 +21,35 @@ class TimerListCreate(generics.ListCreateAPIView):
     queryset = Timer.objects.all()
     serializer_class = TimerSerializer
 
-"""
+
 ####################################################################
-"""
+
 
 #Assign string for simplified command construction
-send = "irsend SEND_ONCE lircd.conf KEY_"
+send = 'irsend SEND_ONCE lircd.conf KEY_'
 
 #Compose Control command
-cd_set = send + "CD-SET"
-mode = send + "MODE"
-play = send + "PLAY"
-ret = send + "RETURN"
-t_set = send + "T-SET"
-power = send + "POWER"
-plus = send + "+"
-minus = send + "-"
-
-#Load Home page
-#def clocks(request):
-#    return render(request, 'clocks.html')
+cd_set = send + 'CD-SET'
+mode = send + 'MODE'
+play = send + 'PLAY'
+ret = send + 'RETURN'
+t_set = send + 'T-SET'
+power = send + 'POWER'
+plus = send + '+'
+minus = send + '-'
 
 #Press power button on clock
+@csrf_exempt
 def powerBtn(request):
     os.system('sudo kill $(pidof lircd)')
     time.sleep(1)
     os.system('sudo lircd --device /dev/lirc0')
     time.sleep(1)
     os.system(power)
-    return render(request, 'clocks.html')
+    return HttpResponse('OK')
 
 #Set timer on clock
+@csrf_exempt
 def timer(request):
 
     #Determine which query is used
@@ -78,12 +79,12 @@ def timer(request):
         os.system(digit5)
         os.system(digit6)
         os.system(play)
-        return render(request, 'clocks.html')
+        return HttpResponse('OK')
 
     #Pause Timer
     if request.method == 'GET' and 'pause' in request.GET:
         os.system(play)
-        return render(request, 'clocks.html')
+        return HttpResponse('OK')
 
     #Stop Timer and show time
     if request.method == 'GET' and 'stop' in request.GET:
@@ -91,9 +92,10 @@ def timer(request):
         os.system(cd_set)
         os.system(cd_set)
         os.system(ret)
-        return render(request, 'clocks.html')
+        return HttpResponse('OK')
 
 #Syncronize clock
+@csrf_exempt
 def sync(request):
 
     #Get current time from RPi
@@ -132,20 +134,21 @@ def sync(request):
     os.system(digit5)
     os.system(digit6)
     os.system(ret)
-    return render(request, 'clocks.html')
+    return HttpResponse('OK')
 
 #Toggle between Military time and Regular time
+@csrf_exempt
 def milTime(request):
 
     mil = send + '0'
     os.system(mil)
-    return render(request, 'clocks.html')
+    return HttpResponse('OK')
 
 #Dim Clock
+@csrf_exempt
 def dim(request):
     if request.method == 'GET' and 'bright' in request.GET:
         bright = int(request.GET.get('bright'))
-#        bright = int(bright)
 
         if bright > 0 and bright < 8:
             os.system(minus)
@@ -160,4 +163,67 @@ def dim(request):
             while i < bright:
                 os.system(plus)
                 i += 1
-    return render(request, 'clocks.html')
+    return HttpResponse('OK')
+
+@csrf_exempt
+def meshGET(Script, ARG, Range):
+
+    IPs = '192.168.12.'
+
+    for x in Range:
+        currentIP = IPs + x
+        line = 'http://' + currentIP + '/clocksapp/' + Script + '/?' + ARG
+        requests.get(line)
+    
+    if ARG == 'time=':
+        meshGET(Script, 'pause=1', Range)
+        meshGET(Script, 'pause=1', reversed(Range))
+
+    return ('OK')
+
+@csrf_exempt
+def meshctl(request):
+
+    Range = ['135', '136', '137', '138', '139', '140', '141', '142', '143']
+    
+    if request.method == 'GET' and 'bright' in request.GET:
+        Script = 'dim'
+        ARG = 'bright=' + request.GET.get('bright')
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+    
+    if request.method == 'GET' and 'time' in request.GET:
+        Script = 'timer'
+        ARG = 'time=' + request.GET.get('time')
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+
+    if request.method == 'GET' and 'pause' in request.GET:
+        Script = 'timer'
+        ARG = 'pause=1'
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+    
+    if request.method == 'GET' and 'stop' in request.GET:
+        Script = 'timer'
+        ARG = 'stop=1'
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+
+    if request.method == 'GET' and 'power' in request.GET:
+        Script = 'power'
+        ARG = 'power'
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+    
+    if request.method == 'GET' and 'sync' in request.GET:
+        Script = 'sync'
+        ARG = 'sync'
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)
+    
+    if request.method == 'GET' and 'milTime' in request.GET:
+        Script = 'milTime'
+        ARG = 'milTime'
+        stat = meshGET(Script, ARG, Range)
+        return HttpResponse(stat)

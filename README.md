@@ -247,65 +247,13 @@ timedatectl set-ntp 1
 timedatectl set-timezone "America/New_York"
 ```
 
-# Automate "Git Pull" to happen every 60 sec
-create a python file in the project directory
+# Add auto-update cron job
+Edit the root crontab:
 ```
-touch /home/pi/clock/Clockwerx/autoGitPull.py
+sudo crontab -e 
 ```
-edit the file and insert the code below
+and add the following line:
 ```
-import sh
-from sh import git
-import time
-import os, sys
-
-aggregated = ""
-
-def CheckForUpdate(workingDir):
-    print("Fetching most recent code from source..." + workingDir)
-
-    # Fetch most up to date version of code.
-    p = git("--git-dir=" + workingDir + ".git/", "--work-tree=" + workingDir, "fetch", "origin", "master", _out=ProcessFetch, _out_bufsize=0, _tty_in=True)
-
-    print("Fetch complete.")
-    time.sleep(2)
-    print("Checking status for " + workingDir + "...")
-    statusCheck = git("--git-dir=" + workingDir + ".git/", "--work-tree=" + workingDir, "status")
-
-    if "Your branch is up-to-date" in statusCheck:
-        print("Status check passes.")
-        print("Code up to date.")
-        return False
-    else:
-        print("Code update available.")
-        return True
-
-def ProcessFetch(char, stdin):
-    global aggregated
-
-    sys.stdout.flush()
-    aggregated += char
-    if aggregated.endswith("Password for 'https://yourrepo@bitbucket.org':"):
-        print(mainLogger, "Entering password...", True)
-        stdin.put("yourpassword\n")
-
-if __name__ == "__main__":
-    checkTimeSec = 60
-    gitDir = "/home/pi/clock/Clockwerx/"
-    while True:
-        print("*********** Checking for code update **************")
-
-
-        if CheckForUpdate(gitDir):
-            print("Resetting code...")
-            resetCheck = git("--git-dir=" + gitDir + ".git/", "--work-tree=" + gitDir, "reset", "--hard", "origin/master")
-            print(str(resetCheck))
-                                                                                                                               
-        print("Check complete. Waiting for " + str(checkTimeSec) + "seconds until next check...", True)
-        time.sleep(checkTimeSec)
+32 02 * * * /home/pi/clock/Clockwerx/update_system
 ```
-edit the file /etc/profile and add the following to the bottom of the file
-```
-source /home/pi/clock/Clockwerx/bin/activate        #Activate project virtual environment
-python /home/pi/clock/Clockwerx/autoGitPull &       #Execute scrip to pull updates from repo automatically in the background
-```
+The update_system script can be run manually (as root) at any time to update system packages and the Clockwerx code.

@@ -1,18 +1,22 @@
 const defaultCounntdowns = [
     {
         id: 'Auditorium',
-        time: 0
+        ip: '192.168.12.143',
+        time: 0,
     },
     {
         id: 'BlackSea',
+        ip: '192.168.12.143',
         time: 0
     },
     {
         id: 'Marathon',
+        ip: '192.168.12.143',
         time: 0
     },
     {
         id: 'Tours',
+        ip: '192.168.12.143',
         time: 0
     }
 ];

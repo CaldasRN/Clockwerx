@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import time
-import sys
 
 send = "irsend SEND_ONCE lircd.conf KEY_"
 
