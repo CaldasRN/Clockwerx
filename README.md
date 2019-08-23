@@ -1,3 +1,6 @@
+# Next step
+Create docker container to facilitate expansion and maintenance
+
 # Clockwerx
 Use RPi to Record buttons from clock remote to control clock with Rpi 'IR Remote Shield v1.0' over the network
 
@@ -238,6 +241,19 @@ sudo a2enmod wsgi
 ```
 
 # Set TimeZone and Sync RPi
+To update the RPi to the correct timezone, run the following commands
 ```
 timedatectl set-ntp 1
 timedatectl set-timezone "America/New_York"
+```
+
+# Add auto-update cron job
+Edit the root crontab:
+```
+sudo crontab -e 
+```
+and add the following line:
+```
+32 02 * * * /home/pi/clock/Clockwerx/update_system
+```
+The update_system script can be run manually (as root) at any time to update system packages and the Clockwerx code.

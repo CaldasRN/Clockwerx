@@ -15,24 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-
-#from clocksapp import views
+from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
 
-# Use include() to add url(paths) from the clocksapp application 
-from django.conf.urls import include
+# Use include() to add url(paths) from the apps application 
 
 urlpatterns += [
+    url(r'^EventClock_FE/', include('EventClock_FE.urls')),
     url(r'^clocksapp/', include('clocksapp.urls')),
 ]
 
-"""
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
 urlpatterns += [
-    url('', RedirectView.as_view(url='/clocksapp/', permanent=True)),
+    url(r'^$', RedirectView.as_view(url='/EventClock_FE/', permanent=True)),
 ]
-"""

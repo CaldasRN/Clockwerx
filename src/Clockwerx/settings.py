@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from subprocess import check_output
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +26,10 @@ SECRET_KEY = 'b(c9*qw!3d_+d7$0r#$^%d)7$uh0rhx3aghioklxks%^xj02^v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.194', 'localhost', '127.0.0.1']
+ipWlan = str(check_output(['hostname', '-I']))
+ipWlan = ipWlan[2:16]
 
+ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -38,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Clockwerx',
-    'clocksapp',
+    'clocksapp',            # add the clocksapp
+    'rest_framework',       # enable rest framework
+    'EventClock_FE',        # add the frontend app from REACT
 ]
 
 MIDDLEWARE = [
@@ -56,7 +61,9 @@ ROOT_URLCONF = 'Clockwerx.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'EventClock_FE/build'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,3 +127,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASS' : (
+'rest_framework.authentication.BasicAuthentication', 
+)
+}

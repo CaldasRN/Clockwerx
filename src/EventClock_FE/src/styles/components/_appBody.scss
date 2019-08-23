@@ -1,0 +1,27 @@
+.appBody {
+    padding: 24px;
+    max-width: $size__site-max;
+    margin: 0 auto;
+}
+
+.appBody-hd {
+    & * {
+        width: 100%; 
+        & + * {
+            padding-top: 10px;
+            &:before {
+                content: '';
+                background: $color__gradient-sideFade;
+                display: block;
+                height: 2px;
+                margin-bottom: 5px; 
+                width: 100%;
+            }
+        }
+    }
+}
+
+.appBody-bd {
+    
+    display: block;
+}
