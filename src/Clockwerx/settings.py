@@ -29,6 +29,7 @@ DEBUG = True
 ipWlan = str(check_output(['hostname', '-I']))
 ipWlan = ipWlan[2:16]
 
+ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
 
 #ALLOWED_HOSTS = [ipWlan, 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',

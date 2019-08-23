@@ -17,7 +17,7 @@ class Api {
                 // Send time to start
                 // Set stop: true or false
                 // set pause: true of false
-        });
+            });
     }
     postPower (postObj) {
         return this.baseAxios.get(`/powerBtn`, {

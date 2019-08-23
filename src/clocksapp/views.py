@@ -166,6 +166,7 @@ def dim(request):
     return HttpResponse('OK')
 
 @csrf_exempt
+
 def meshGET(Script, ARG, Range):
 
     IPs = '192.168.12.'
@@ -225,5 +226,4 @@ def meshctl(request):
     if request.method == 'GET' and 'milTime' in request.GET:
         Script = 'milTime'
         ARG = 'milTime'
-        stat = meshGET(Script, ARG, Range)
         return HttpResponse(stat)
